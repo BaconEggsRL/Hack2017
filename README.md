@@ -38,7 +38,9 @@ Set-up tutorial:
     1d. Restart Eclipse.
     
     1e. Add Git Repositories and Git Staging to your workspace view.
+    
         Window > Show View > Other > Git > Git Repositories
+        
         Window > Show View > Other > Git > Git Staging
 
 
@@ -70,6 +72,7 @@ Set-up tutorial:
     3c. Hit the plus sign to add the file to staged changes.
     
     3d. Commit and push the changes to the remote repository.
+        You will need to enter a commit message saying what your changes were.
     
     3e. That's it!  Check on GitHub to verify your changes went through.
     
