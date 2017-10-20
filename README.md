@@ -81,20 +81,20 @@ Set-up tutorial:
 
     4a. Wait for someone to make changes to the README (or do so on another machine.)
                 
-    3b. In Git Repositories, go to Remotes and right click the one with the down arrow.
+    4b. In Git Repositories, go to Remotes and right click the one with the down arrow.
         This is your "fetch" remote for getting updates from the remote.
         The other is your "push" remote for pushing local changes to the remote.
         
     4c. Click fetch.
         You should see a window telling you what updates were fetched.
     
-    3d. Open your README.  Nothing has changed!  What's wrong?
+    4d. Open your README.  Nothing has changed!  What's wrong?
         You still need to merge your local repository with the changes you fetched from remote.
     
-    3e. Right click the whole repository and click Merge.
+    4e. Right click the whole repository and click Merge.
         You can also get to the fetch and push remotes from this menu.
         
-    3f. That's it!  Now you should see the changes in your README.
+    4f. That's it!  Now you should see the changes in your README.
 
 
 References:
