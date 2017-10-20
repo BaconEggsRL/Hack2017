@@ -61,7 +61,7 @@ Set-up tutorial:
         You may still need to import the project to your Package Explorer to see the files.
     
     
-3.  Test your setup.
+3.  Make your first commit and push.
 
     3a. Edit README.md
         Make some changes and save the file.
@@ -74,8 +74,27 @@ Set-up tutorial:
     3d. Commit and push the changes to the remote repository.
         You will need to enter a commit message saying what your changes were.
     
-    3e. That's it!  Check on GitHub to verify your changes went through.
+    3e. Check on GitHub to verify your changes went through.
     
+    
+4.  Make your fetch and merge (pull)
+
+    4a. Wait for someone to make changes to the README (or do so on another machine.)
+                
+    3b. In Git Repositories, go to Remotes and right click the one with the down arrow.
+        This is your "fetch" remote for getting updates from the remote.
+        The other is your "push" remote for pushing local changes to the remote.
+        
+    4c. Click fetch.
+        You should see a window telling you what updates were fetched.
+    
+    3d. Open your README.  Nothing has changed!  What's wrong?
+        You still need to merge your local repository with the changes you fetched from remote.
+    
+    3e. Right click the whole repository and click Merge.
+        You can also get to the fetch and push remotes from this menu.
+        
+    3f. That's it!  Now you should see the changes in your README.
 
 
 References:
