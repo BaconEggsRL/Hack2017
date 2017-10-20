@@ -93,6 +93,7 @@ Set-up tutorial:
     
     4e. Right click the whole repository and click Merge.
         You can also get to the fetch and push remotes from this menu.
+        To fetch and merge in one step, you can do a "Pull" from here as well.
         
     4f. That's it!  Now you should see the changes in your README.
 
