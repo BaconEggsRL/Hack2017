@@ -62,7 +62,7 @@ public class InputOutput {
 			
 		}
 		
-		System.out.println("Compress binary Rep: " + binaryStringRep);
+		
 		
 		int uselessBits = 8 - (binaryStringRep.length() % 8);
 		for(int j=0; j< uselessBits; j++) {
@@ -82,11 +82,11 @@ public class InputOutput {
 		inStream.close();
 		outStream.close();
 		
-		
+		Key.getNode().c = Integer.toString(uselessBits);
 		
 	}
 	
-	public static void decompress(BinaryTree tree, File in, File out) throws IOException {
+	public static void decompress(BinaryTree tree, File in, File out, int useless) throws IOException {
 		
 		FileInputStream inStream = new FileInputStream(in);
 		String binaryStringRep = "";
@@ -102,10 +102,12 @@ public class InputOutput {
 			binaryStringRep += rep;
 		}
 		
+		binaryStringRep = binaryStringRep.substring(0, binaryStringRep.length()- useless);
 		
 		
 		
-		System.out.println("Decompress binary Rep: " + binaryStringRep);
+		
+		
 		
 		
 		FileOutputStream outStream = new FileOutputStream(out);
