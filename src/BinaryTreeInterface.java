@@ -2,12 +2,17 @@
 
 public interface BinaryTreeInterface {
 	
-	public interface Node {
-		
-
+	public class Node {
+		int count;
+		String c;
 	}
-	public void assemby(BinaryTreeInterface left, BinaryTreeInterface right);
-	public void getNode(int binary);
-	public int getPath(Node n);
+	
+	public char getNode(String binary);
+	public String getPath();
+	BinaryTreeInterface assembyTogether(BinaryTreeInterface left, BinaryTreeInterface right);
+	Node getNode();
+	public void setPath(String string);
+	public void setParent(BinaryTreeInterface parent);
+	public BinaryTreeInterface getParent();
 	
 }
