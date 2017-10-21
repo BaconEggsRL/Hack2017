@@ -8,7 +8,7 @@ public interface BinaryTreeInterface {
 	}
 	
 	public char getNode(String binary);
-	public String getPath();
+	public String getPath(String string);
 	BinaryTreeInterface assembyTogether(BinaryTreeInterface left, BinaryTreeInterface right);
 	Node getNode();
 	public void setPath(String string);

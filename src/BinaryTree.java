@@ -62,8 +62,8 @@ public class BinaryTree implements BinaryTreeInterface {
 	}
 
 	@Override
-	public String getPath() {
-		return path + this.getParent().getPath();
+	public String getPath(String string) {
+		return (String)pathMap.get(string);
 	}
 
 
