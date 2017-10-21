@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -53,7 +54,17 @@ public class InputOutput {
 		
 	}
 	
-	public static void toCompressedFile(BinaryTree Key, File in, File out) throws IOException {
+	public static byte[] toByteArray(BitSet bits) {
+        byte[] bytes = new byte[(bits.length() + 7) / 8];
+        for (int i = 0; i < bits.length(); i++) {
+            if (bits.get(i)) {
+                bytes[bytes.length - i / 8 - 1] |= 1 << (i % 8);
+            }
+        }
+        return bytes;
+    }
+	
+	public static void compress(BinaryTree Key, File in, File out) throws IOException {
 		Map<Character,Integer> fileMap = getFileToMap(in);
 		int compressedFileLength = getCompressedFileCharLength(Key, fileMap);
 		
@@ -74,10 +85,59 @@ public class InputOutput {
 			}
 		}
 		
-		int bitRemainder = compressedFileLength % 8;
 		
+		
+		byte[] byteArray = toByteArray(bitSet);
+		
+		FileOutputStream outStream = new FileOutputStream(out);
+		
+		outStream.write(byteArray);
+		
+		inStream.close();
+		outStream.close();
 		
 	}
+	
+	public static void decompress(BinaryTree tree, File in, File out) throws IOException {
+		
+		FileInputStream inStream = new FileInputStream(in);
+		String binaryStringRep = "";
+		
+		while(inStream.available() > 0) {
+			Character next = (char)inStream.read();
+			binaryStringRep += Integer.toBinaryString((int)next);
+		}
+		
+		
+		FileOutputStream outStream = new FileOutputStream(out);
+		
+		BinaryTree currentTree = tree;
+		for(int i=0; i<binaryStringRep.length(); i++) {
+			
+			if(binaryStringRep.charAt(i) == 0) {
+				BinaryTree left;
+				left = (BinaryTree) currentTree.left;
+				currentTree = left;
+			}else {
+				BinaryTree right;
+				right = (BinaryTree) currentTree.right;
+				currentTree = right;
+			}
+			if(currentTree.getNode().c != null) {
+				char charRep = currentTree.getNode().c.charAt(0);
+				outStream.write(charRep);
+				currentTree = tree; 
+			}
+		}
+		outStream.close();
+		inStream.close();
+		
+	}
+	
+	
+	
+	
+	
 	
 
 }
