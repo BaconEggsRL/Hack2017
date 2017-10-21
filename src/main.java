@@ -5,14 +5,14 @@ public class main {
 
     public static void main(String[] args) {
 
-        InputOutput io = new InputOutput();
+        
         File f = new File("lyrics");
         File out = new File("comp");
 
         try {
-            BinaryTree tree = new BinaryTree(io.getFileToMap(f));
+            BinaryTree tree = new BinaryTree(InputOutput.getFileToMap(f));
 
-            io.toCompressedFile(tree, f, out);
+            InputOutput.toCompressedFile(tree, f, out);
 
         } catch (IOException e) {
             // TODO Auto-generated catch block

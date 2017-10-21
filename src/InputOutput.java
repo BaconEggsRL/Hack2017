@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class InputOutput {
-<<<<<<< HEAD
+
 	
 	
 	
@@ -38,23 +38,6 @@ public class InputOutput {
 		
 	}
 	
-	public static int getCompressedFileCharLength(BinaryTree key, Map<Character,Integer> counts) {
-		int count = 0;
-		
-		Iterator mapIterator = counts.entrySet().iterator();
-		
-		while(mapIterator.hasNext()) {
-			Map.Entry<Character,Integer> pair = (Map.Entry)mapIterator.next();
-			int occurances = (int) pair.getValue();
-			Character character = (char) pair.getKey();
-			String path = key.getPath(String.valueOf(character));
-			count += (path.length() * occurances);
-			
-		}
-		
-		return count;
-		
-	}
 	
 	public static byte[] toByteArray(BitSet bits) {
         byte[] bytes = new byte[(bits.length() + 7) / 8];
@@ -136,35 +119,7 @@ public class InputOutput {
 		
 	}
 	
-	
-	
-	
-	
-	
-=======
 
-    public static Map<Character, Integer> getFileToMap(File file)
-            throws IOException {
-
-        Map<Character, Integer> counts = new HashMap<>();
-
-        FileInputStream iOStream = new FileInputStream(file);
-
-        while (iOStream.available() > 0) {
-            Character currentChar = (char) iOStream.read();
-            if (counts.containsKey(currentChar)) {
-                Integer currentValue = counts.get(currentChar);
-                counts.replace(currentChar, currentValue + 1);
-            } else {
-                counts.put(currentChar, 1);
-            }
-
-        }
-
-        iOStream.close();
-        return counts;
-
-    }
 
     public static int getCompressedFileCharLength(BinaryTree key,
             Map<Character, Integer> counts) {
