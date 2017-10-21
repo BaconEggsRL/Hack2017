@@ -50,36 +50,42 @@ public class InputOutput {
 	
 	public static void compress(BinaryTree Key, File in, File out) throws IOException {
 		Map<Character,Integer> fileMap = getFileToMap(in);
-		int compressedFileLength = getCompressedFileCharLength(Key, fileMap);
-		
-		BitSet bitSet = new BitSet(compressedFileLength);
 		
 		FileInputStream inStream = new FileInputStream(in);
 		
-		//to bitset
-		int currentBitSetIndex = 0;
+		String binaryStringRep = "";
+		
 		while(inStream.available() > 0) {
 			Character next = (char)inStream.read();
-			String path = Key.getPath(String.valueOf(next));
-			for(int i=0; i<path.length(); i++) {
-				if(path.charAt(i) == '1') {
-					bitSet.set(currentBitSetIndex);
-				}
-				currentBitSetIndex++;
+			String currentPath = Key.getPath(""+next);
+			binaryStringRep += currentPath;
+			
+		}
+		
+		int binaryStringRepRemainder = binaryStringRep.length() % 8;
+		for(int j=0; j< 8-binaryStringRepRemainder; i++) {
+			binaryStringRep+='0';
+		}
+		
+		
+		int compressedFileLength = getCompressedFileCharLength(Key, fileMap);
+		BitSet bitSet = new BitSet(compressedFileLength);
+		
+		
+		
+		for(int i=0; i<binaryStringRep.length(); i++) {
+			if(binaryStringRep.charAt(i) == '1') {
+				bitSet.set(i);
 			}
 		}
 		
-		
-		
-		byte[] byteArray = toByteArray(bitSet);
+		for(int k=0; k<bitSet.length(); k=k+8) {
+			
+		}
 		
 		FileOutputStream outStream = new FileOutputStream(out);
 		
-		for(int i=0; i<byteArray.length; i++) {
-			char currentChar = (char)byteArray[i];
-			outStream.write(currentChar);
 		
-		}
 		
 		inStream.close();
 		outStream.close();
@@ -96,7 +102,7 @@ public class InputOutput {
 			binaryStringRep += Integer.toBinaryString((int)next);
 		}
 		
-		System.out.print("1" +binaryStringRep);
+		
 		
 		
 		FileOutputStream outStream = new FileOutputStream(out);
@@ -104,7 +110,7 @@ public class InputOutput {
 		BinaryTree currentTree = tree;
 		for(int i=0; i<binaryStringRep.length(); i++) {
 			
-			if(binaryStringRep.charAt(i) == 0) {
+			if(binaryStringRep.charAt(i) == '0') {
 				BinaryTree left;
 				left = (BinaryTree) currentTree.left;
 				currentTree = left;
@@ -142,32 +148,6 @@ public class InputOutput {
         }
 
         return count;
-
-    }
-
-    public static void toCompressedFile(BinaryTree Key, File in, File out)
-            throws IOException {
-        Map<Character, Integer> fileMap = getFileToMap(in);
-        int compressedFileLength = getCompressedFileCharLength(Key, fileMap);
-
-        BitSet bitSet = new BitSet(compressedFileLength);
-
-        FileInputStream inStream = new FileInputStream(in);
-
-        //to bitset
-        int currentBitSetIndex = 0;
-        while (inStream.available() > 0) {
-            Character next = (char) inStream.read();
-            String path = Key.getPath(String.valueOf(next));
-            for (int i = 0; i < path.length(); i++) {
-                if (path.charAt(i) == '1') {
-                    bitSet.set(currentBitSetIndex);
-                }
-                currentBitSetIndex++;
-            }
-        }
-
-        int bitRemainder = compressedFileLength % 8;
 
     }
 
