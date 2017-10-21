@@ -7,12 +7,12 @@ public class main {
 
         
         File f = new File("lyrics");
-        File out = new File("comp");
+        File out = new File("comp.txt");
 
         try {
             BinaryTree tree = new BinaryTree(InputOutput.getFileToMap(f));
 
-            InputOutput.toCompressedFile(tree, f, out);
+            InputOutput.compress(tree, f, out);
 
         } catch (IOException e) {
             // TODO Auto-generated catch block

@@ -1,10 +1,9 @@
 import java.io.File;
 import java.io.FileInputStream;
-<<<<<<< HEAD
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-=======
->>>>>>> branch 'master' of ssh://git@github.com/apatton090/Hack2017.git
+
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -76,7 +75,11 @@ public class InputOutput {
 		
 		FileOutputStream outStream = new FileOutputStream(out);
 		
-		outStream.write(byteArray);
+		for(int i=0; i<byteArray.length; i++) {
+			char currentChar = (char)byteArray[i];
+			outStream.write(currentChar);
+		
+		}
 		
 		inStream.close();
 		outStream.close();
@@ -132,7 +135,7 @@ public class InputOutput {
             int occurances = pair.getValue();
             Character character = (char) pair.getKey();
             String path = key.getPath(String.valueOf(character));
-//            System.out.println(path);
+            System.out.println(path);
             count += (path.length() * occurances);
 
         }
