@@ -1,6 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -29,19 +28,14 @@ public class GUI extends JFrame {
     /**
      * Launch the application.
      */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    GUI frame = new GUI();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+    /*
+     * public static void main(String[] args) { EventQueue.invokeLater(new
+     * Runnable() {
+     * 
+     * @Override public void run() { try { GUI frame = new GUI();
+     * frame.setVisible(true); } catch (Exception e) { e.printStackTrace(); } }
+     * }); }
+     */
 
     /**
      * Create the frame.
