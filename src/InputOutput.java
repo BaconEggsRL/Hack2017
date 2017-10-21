@@ -96,6 +96,8 @@ public class InputOutput {
 			binaryStringRep += Integer.toBinaryString((int)next);
 		}
 		
+		System.out.print("1" +binaryStringRep);
+		
 		
 		FileOutputStream outStream = new FileOutputStream(out);
 		
@@ -135,7 +137,6 @@ public class InputOutput {
             int occurances = pair.getValue();
             Character character = (char) pair.getKey();
             String path = key.getPath(String.valueOf(character));
-            System.out.println(path);
             count += (path.length() * occurances);
 
         }
