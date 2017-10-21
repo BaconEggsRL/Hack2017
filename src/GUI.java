@@ -1,10 +1,16 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -12,6 +18,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 public class GUI extends JFrame {
@@ -43,11 +51,8 @@ public class GUI extends JFrame {
     }
 
     private void buildGUI() {//Builds each component of the GUI
-        this.createWindow();
-        this.createMenuBar();
-    }
 
-    private void createWindow() {//Creates the JFrame window
+        //Creates the JFrame window
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);//clicking the x closes the window
         this.contentPane = new JPanel();
@@ -65,36 +70,77 @@ public class GUI extends JFrame {
         this.setResizable(false);
         this.setTitle("JAD Compression");//window title
 
-    }
+        //Creates the user input text field
+        final JTextArea textArea = new JTextArea();
+        textArea.setFont(new Font("Calibri", Font.BOLD, 20));
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        this.add(new JScrollPane(textArea), BorderLayout.CENTER);
 
-    private void createMenuBar() {//Creates the menu bar of the JFrame window
+        //Creates the menu bar of the JFrame window
 
-        //menuBar
+        //menuBar - Menu Bar
         JMenuBar menuBar = new JMenuBar();
 
-        //mnFile
+        //mnFile - Menu Bar - File Menu
         JMenu mnFile = new JMenu("File");
 
-        //mntmImport
-        JMenuItem mntmImport = new JMenuItem("Import...");
+        //mntmSave - Menu Bar - File > Save - saves textArea to file
+        JMenuItem mntmSave = new JMenuItem("Save");
+        mntmSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setApproveButtonText("Save");
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        File fileName = new File(
+                                fileChooser.getSelectedFile() + ".txt");
+                        FileWriter writer = new FileWriter(fileName);
+                        BufferedWriter bw = new BufferedWriter(writer);
+                        textArea.write(bw);
+                        bw.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    textArea.requestFocus();
+                }
+            }
+        });
 
+        //mntmImport - Menu Bar - File > Import... - imports text file into textArea
+        JMenuItem mntmImport = new JMenuItem("Import...");
         mntmImport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 JFileChooser fileChooser = new JFileChooser();
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    System.out.println(selectedFile.getName());
+                    try {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        FileReader reader = new FileReader(selectedFile);
+                        BufferedReader br = new BufferedReader(reader);
+                        textArea.read(br, null);
+                        br.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    textArea.requestFocus();
                 }
             }
         });
 
-        //Add all components
+        //Add all menu components
+        mnFile.add(mntmSave);
         mnFile.add(mntmImport);
         menuBar.add(mnFile);
 
         //Set this menu bar in the current frame
         this.setJMenuBar(menuBar);
+
     }
+
 }
