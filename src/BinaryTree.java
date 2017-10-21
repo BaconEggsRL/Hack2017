@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class BinaryTree implements BinaryTreeInterface {
 
@@ -6,35 +9,82 @@ public class BinaryTree implements BinaryTreeInterface {
 	private BinaryTreeInterface parent;
 	private BinaryTreeInterface left;
 	private BinaryTreeInterface right;
-	private String path;
-	private Map pathMap;
+	private String path = null;
+	private Map<String, String> pathMap;
 
-	public BinaryTree(Map<Integer, Character> m) {
+	public BinaryTree(Map<Integer, String> m) {
+		ArrayList<BinaryTree> list = new ArrayList<>();
+		BinaryTree[] leaf = new BinaryTree[m.size()];
+		
+		//create leaf
+		int i = 0;
+		for(Entry<Integer, String> pair: m.entrySet()) {
+			Node newNode = new Node(pair.getKey(), pair.getValue());
+			BinaryTree tree = new BinaryTree(newNode);
+			leaf[i] = tree;
+			i++;
+			addAndSort(list, tree);
+		}
+		
+		//assemble tree
+		while(list.size() > 1) {
+			BinaryTree lowest1 = list.remove(0);
+			BinaryTree lowest2 = list.remove(0);
+			
+			int parentCount = lowest1.getNode().count + lowest2.getNode().count;
+			
+			BinaryTree parent = new BinaryTree(new Node(parentCount, null));
+			addAndSort(list, parent);			
+		}
+		
+		//root
+		this.node = list.get(0).node;
+		this.left = list.get(0).left;
+		this.right = list.get(0).right;
+		
+		//map path
+		this.pathMap = new HashMap<String, String>();
+		for(BinaryTree leafTree: leaf) {
+			this.pathMap.put(leafTree.getPath(), leafTree.node.c);
+		}
+	}
 
+	private static void addAndSort(ArrayList<BinaryTree> list, BinaryTree tree) {
+		if(list.isEmpty()) {
+			list.add(tree);
+		}
+		
+		
+		int i = 0;
+		boolean added = false;
+		while(i < list.size() && !added) {
+			if(tree.node.compareTo(list.get(0).node) > 0) {
+			i++;
+			}
+			else {
+				list.add(i, tree);
+				added = true;
+			}
+		
+		}
+		
 	}
 
 	public BinaryTree(Node n) {
-
+		this.node = n;
 	}
 
 
 
 	@Override
-	public BinaryTreeInterface assembyTogether
+	public void assembyTogether
 	(BinaryTreeInterface left, BinaryTreeInterface right) {
-
-		int parentCount = left.getNode().count + right.getNode().count;
-
-		Node parent = new Node(parentCount, null);
-		BinaryTree parentTree = new BinaryTree(parent);
 		left.setPath("0");
 		right.setPath("1");
-		left.setParent(parentTree);
-		right.setParent(parentTree);
-		parentTree.left = left;
-		parentTree.right = right;
-
-		return parentTree;
+		left.setParent(this);
+		right.setParent(this);
+		this.left = left;
+		this.right = right;
 	}
 
 
@@ -63,7 +113,11 @@ public class BinaryTree implements BinaryTreeInterface {
 
 	@Override
 	public String getPath(String string) {
-		return (String)pathMap.get(string);
+		return pathMap.get(string);
+	}
+	
+	public String getPath() {
+		return this.parent.getPath() + this.path;
 	}
 
 
@@ -81,17 +135,24 @@ public class BinaryTree implements BinaryTreeInterface {
 			this.count = count;
 			this.c = c;
 		}
+		
+		public int compareTo(Node n) {
+			if(this.count >= n.count) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
 	}
 
 	@Override
 	public void setParent(BinaryTreeInterface parent) {
-		// TODO Auto-generated method stub
 		this.parent = parent;
 	}
 
 	@Override
 	public BinaryTreeInterface getParent() {
-		// TODO Auto-generated method stub
 		return this.parent;
 		}
 

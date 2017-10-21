@@ -9,10 +9,11 @@ public interface BinaryTreeInterface {
 	
 	public char getNode(String binary);
 	public String getPath(String string);
-	BinaryTreeInterface assembyTogether(BinaryTreeInterface left, BinaryTreeInterface right);
+	public void assembyTogether(BinaryTreeInterface left, BinaryTreeInterface right);
 	Node getNode();
 	public void setPath(String string);
 	public void setParent(BinaryTreeInterface parent);
 	public BinaryTreeInterface getParent();
+	public String getPath();
 	
 }
