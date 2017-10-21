@@ -42,7 +42,7 @@ public class InputOutput {
             int occurances = pair.getValue();
             Character character = (char) pair.getKey();
             String path = key.getPath(String.valueOf(character));
-            System.out.println(path);
+//            System.out.println(path);
             count += (path.length() * occurances);
 
         }

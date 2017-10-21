@@ -35,11 +35,11 @@ public class BinaryTree implements BinaryTreeInterface {
 
             BinaryTree parent = new BinaryTree(new Node(parentCount, null));
             parent.left = lowest1;
-            lowest1.parent = this;
+            lowest1.parent = parent;
             lowest1.path = "0";
             parent.right = lowest2;
-            lowest2.parent = this;
-            lowest1.path = "1";
+            lowest2.parent = parent;
+            lowest2.path = "1";
             
             
             
@@ -68,8 +68,7 @@ public class BinaryTree implements BinaryTreeInterface {
         int i = 0;
         boolean added = false;
         while (i < list.size() && !added) {
-        	System.out.println(tree.node.compareTo(list.get(0).node));
-            if (tree.node.compareTo(list.get(0).node) > 0) {
+            if (tree.node.compareTo(list.get(i).node) > 0) {
                 i++;
             } else {
                 list.add(i, tree);
@@ -129,9 +128,13 @@ public class BinaryTree implements BinaryTreeInterface {
     @Override
     public String getPath() {
         if (this.parent == null) {
-            return this.path;
+            return "";
         } else {
-            return this.parent.getPath() + this.path;
+        	String parentPath = this.parent.getPath();
+//        	System.out.println(parentPath);
+//        	System.out.println(this.path);
+//        	System.out.println(parentPath+ this.path);
+            return parentPath + this.path;
         }
     }
 
