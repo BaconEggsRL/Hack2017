@@ -7,6 +7,7 @@ public class BinaryTree implements BinaryTreeInterface {
 	private BinaryTreeInterface left;
 	private BinaryTreeInterface right;
 	private String path;
+	private Map pathMap;
 
 	public BinaryTree(Map<Integer, Character> m) {
 
