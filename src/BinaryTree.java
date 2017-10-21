@@ -12,14 +12,14 @@ public class BinaryTree implements BinaryTreeInterface {
 	private String path = null;
 	private Map<String, String> pathMap;
 
-	public BinaryTree(Map<Integer, String> m) {
+	public BinaryTree(Map<Character, Integer> m) {
 		ArrayList<BinaryTree> list = new ArrayList<>();
 		BinaryTree[] leaf = new BinaryTree[m.size()];
 		
 		//create leaf
 		int i = 0;
-		for(Entry<Integer, String> pair: m.entrySet()) {
-			Node newNode = new Node(pair.getKey(), pair.getValue());
+		for(Entry<Character, Integer> pair: m.entrySet()) {
+			Node newNode = new Node(pair.getValue(), pair.getKey() + "");
 			BinaryTree tree = new BinaryTree(newNode);
 			leaf[i] = tree;
 			i++;
