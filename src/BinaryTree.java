@@ -10,7 +10,7 @@ public class BinaryTree implements BinaryTreeInterface {
     public BinaryTreeInterface left;
     public BinaryTreeInterface right;
     private String path = null;
-    private Map<String, String> pathMap;
+    public Map<String, String> pathMap;
 
     public BinaryTree(Map<Character, Integer> m) {
         ArrayList<BinaryTree> list = new ArrayList<>();

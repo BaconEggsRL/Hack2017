@@ -62,33 +62,27 @@ public class InputOutput {
 			
 		}
 		
-		int binaryStringRepRemainder = binaryStringRep.length() % 8;
-		for(int j=0; j< 8-binaryStringRepRemainder; i++) {
+		System.out.println("Compress binary Rep: " + binaryStringRep);
+		
+		int uselessBits = 8 - (binaryStringRep.length() % 8);
+		for(int j=0; j< uselessBits; j++) {
 			binaryStringRep+='0';
 		}
 		
 		
-		int compressedFileLength = getCompressedFileCharLength(Key, fileMap);
-		BitSet bitSet = new BitSet(compressedFileLength);
-		
-		
-		
-		for(int i=0; i<binaryStringRep.length(); i++) {
-			if(binaryStringRep.charAt(i) == '1') {
-				bitSet.set(i);
-			}
-		}
-		
-		for(int k=0; k<bitSet.length(); k=k+8) {
-			
-		}
 		
 		FileOutputStream outStream = new FileOutputStream(out);
 		
+		for(int k=0; k<binaryStringRep.length(); k=k+8) {
+			 int binary = Integer.parseInt(binaryStringRep.substring(k,k+8), 2);
+			outStream.write(binary);
+		}
 		
 		
 		inStream.close();
 		outStream.close();
+		
+		
 		
 	}
 	
@@ -99,10 +93,19 @@ public class InputOutput {
 		
 		while(inStream.available() > 0) {
 			Character next = (char)inStream.read();
-			binaryStringRep += Integer.toBinaryString((int)next);
+			String rep = Integer.toBinaryString((int)next);
+			if(rep.length() < 8) {
+				for(int i=0; i<(8-rep.length()); i++) {
+				binaryStringRep = binaryStringRep + '0';
+				}
+			}
+			binaryStringRep += rep;
 		}
 		
 		
+		
+		
+		System.out.println("Decompress binary Rep: " + binaryStringRep);
 		
 		
 		FileOutputStream outStream = new FileOutputStream(out);
@@ -111,12 +114,10 @@ public class InputOutput {
 		for(int i=0; i<binaryStringRep.length(); i++) {
 			
 			if(binaryStringRep.charAt(i) == '0') {
-				BinaryTree left;
-				left = (BinaryTree) currentTree.left;
+				BinaryTree left = (BinaryTree) currentTree.left;
 				currentTree = left;
 			}else {
-				BinaryTree right;
-				right = (BinaryTree) currentTree.right;
+				BinaryTree right = (BinaryTree) currentTree.right;
 				currentTree = right;
 			}
 			if(currentTree.getNode().c != null) {
