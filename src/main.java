@@ -8,16 +8,12 @@ public class main {
         
         File f = new File("lyrics");
         File out = new File("comp.txt");
-        
         File decomp = new File("decomp.txt");
 
-            BinaryTree tree = new BinaryTree(InputOutput.getFileToMap(f));
-            
-            
-            
-            
-            
-            InputOutput.decompress(tree, out, decomp);
+        BinaryTree tree = new BinaryTree(InputOutput.getFileToMap(f));
+        
+        InputOutput.compress(tree, f, out);
+        InputOutput.decompress(tree, out, decomp);
 
     }
 
