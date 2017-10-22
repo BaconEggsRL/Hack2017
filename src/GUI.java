@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -28,14 +29,21 @@ public class GUI extends JFrame {
     /**
      * Launch the application.
      */
-    /*
-     * public static void main(String[] args) { EventQueue.invokeLater(new
-     * Runnable() {
-     * 
-     * @Override public void run() { try { GUI frame = new GUI();
-     * frame.setVisible(true); } catch (Exception e) { e.printStackTrace(); } }
-     * }); }
-     */
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    GUI frame = new GUI();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     /**
      * Create the frame.
@@ -78,6 +86,9 @@ public class GUI extends JFrame {
 
         //mnFile - Menu Bar - File Menu
         JMenu mnFile = new JMenu("File");
+
+        //mnFile - Menu Bar - Compress Menu
+        JMenu mnCompress = new JMenu("Compress");
 
         //mntmSave - Menu Bar - File > Save - saves textArea to file
         JMenuItem mntmSave = new JMenuItem("Save");
@@ -127,10 +138,64 @@ public class GUI extends JFrame {
             }
         });
 
+        //mntmCompressFile - Menu Bar - Compress > File - compresses text in File
+        JMenuItem mntmCompressFile = new JMenuItem("File");
+        mntmCompressFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                JFileChooser fileChooser = new JFileChooser();
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        File f = fileChooser.getSelectedFile();
+                        BinaryTree tree;
+                        File out = new File("comprand1.txt");
+                        File decomp = new File("decomprand1.txt");
+                        tree = new BinaryTree(InputOutput.getFileToMap(f));
+                        InputOutput.compress(tree, f, out);
+                        InputOutput.decompress(tree, out, decomp);
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    textArea.requestFocus();
+                }
+            }
+        });
+
+        //mntmCompressTextArea - Menu Bar - Compress > Text Area - compresses text in textArea
+        JMenuItem mntmCompressTextArea = new JMenuItem("Text");
+        mntmCompressTextArea.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                try {
+                    File f = new File("myText.txt");
+                    FileWriter writer = new FileWriter(f);
+                    BufferedWriter bw = new BufferedWriter(writer);
+                    textArea.write(bw);
+                    bw.close();
+                    BinaryTree tree;
+                    File out = new File("comprand1.txt");
+                    File decomp = new File("decomprand1.txt");
+                    tree = new BinaryTree(InputOutput.getFileToMap(f));
+                    InputOutput.compress(tree, f, out);
+                    InputOutput.decompress(tree, out, decomp);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                textArea.requestFocus();
+            }
+        });
+
         //Add all menu components
         mnFile.add(mntmSave);
         mnFile.add(mntmImport);
         menuBar.add(mnFile);
+
+        mnCompress.add(mntmCompressFile);
+        mnCompress.add(mntmCompressTextArea);
+        menuBar.add(mnCompress);
 
         //Set this menu bar in the current frame
         this.setJMenuBar(menuBar);
