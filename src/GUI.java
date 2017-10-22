@@ -153,7 +153,8 @@ public class GUI extends JFrame {
                         File decomp = new File("decomprand1.txt");
                         tree = new BinaryTree(InputOutput.getFileToMap(f));
                         InputOutput.compress(tree, f, out);
-                        InputOutput.decompress(tree, out, decomp);
+                        InputOutput.decompress(tree, out, decomp,
+                                Integer.parseInt(tree.getNode().c));
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -168,23 +169,31 @@ public class GUI extends JFrame {
         mntmCompressTextArea.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                try {
-                    File f = new File("myText.txt");
-                    FileWriter writer = new FileWriter(f);
-                    BufferedWriter bw = new BufferedWriter(writer);
-                    textArea.write(bw);
-                    bw.close();
-                    BinaryTree tree;
-                    File out = new File("comprand1.txt");
-                    File decomp = new File("decomprand1.txt");
-                    tree = new BinaryTree(InputOutput.getFileToMap(f));
-                    InputOutput.compress(tree, f, out);
-                    InputOutput.decompress(tree, out, decomp);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setApproveButtonText("Save");
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        File f = fileChooser.getSelectedFile();
+                        FileWriter writer = new FileWriter(f);
+                        BufferedWriter bw = new BufferedWriter(writer);
+                        textArea.write(bw);
+                        bw.close();
+                        BinaryTree tree;
+                        File comp = new File(f.getCanonicalPath() + f.getName()
+                                + "-comp.txt");
+                        File decomp = new File(f.getCanonicalPath()
+                                + f.getName() + "-decomp.txt");
+                        tree = new BinaryTree(InputOutput.getFileToMap(f));
+                        InputOutput.compress(tree, f, comp);
+                        InputOutput.decompress(tree, comp, decomp,
+                                Integer.parseInt(tree.getNode().c));
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    textArea.requestFocus();
                 }
-                textArea.requestFocus();
             }
         });
 
