@@ -11,12 +11,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -92,12 +94,13 @@ public class GUI extends JFrame {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             try {
                 f = fileChooser.getSelectedFile();
-                File comp = new File(f.getCanonicalPath() + "-comp.txt");
-                File decomp = new File(f.getCanonicalPath() + "-decomp.txt");
-                tree = new BinaryTree(InputOutput.getFileToMap(f));
+                File comp = new File(f.getCanonicalPath() + "-comp");
+                Map<Character, Integer> key = InputOutput.getFileToMap(f);
+                tree = new BinaryTree(key);
                 InputOutput.compress(tree, f, comp);
-                InputOutput.decompress(tree, comp, decomp,
-                        Integer.parseInt(tree.getNode().c));
+                String uselessBits = tree.getNode().c;
+                InputOutput.keyMapToFile(uselessBits, key,
+                        new File(f.getCanonicalPath() + "-comp-key"));
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -106,13 +109,41 @@ public class GUI extends JFrame {
         }
     }
 
+    private void decompressFile(JTextArea textArea) {
+        File f, key;
+        BinaryTree tree;
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                f = fileChooser.getSelectedFile();
+                key = new File(f.getCanonicalPath() + "-key");
+                //test.txt-comp.txt-key.txt
+                //test.txt-key
+                File decomp = new File(f.getCanonicalPath() + "-decomp");
+                if (!decomp.exists()) {
+                    decomp.createNewFile();
+                }
+                tree = new BinaryTree(InputOutput.fileToKeyMap(key));
+                tree.getNode().c = InputOutput.returnUselessBits(key);
+                System.out.println(tree.getNode().c);
+                InputOutput.decompress(tree, f, decomp,
+                        Integer.parseInt(tree.getNode().c));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+    }
+
     private void compressText(JTextArea textArea) {
         BinaryTree tree;
         File f;
         f = this.saveFile(textArea);
         try {
-            File comp = new File(f.getCanonicalPath() + "-comp.txt");
-            File decomp = new File(f.getCanonicalPath() + "-decomp.txt");
+            File comp = new File(f.getCanonicalPath() + "-comp");
+            File decomp = new File(f.getCanonicalPath() + "-decomp");
             tree = new BinaryTree(InputOutput.getFileToMap(f));
             InputOutput.compress(tree, f, comp);
             InputOutput.decompress(tree, comp, decomp,
@@ -169,12 +200,18 @@ public class GUI extends JFrame {
         //mnFile - Menu Bar - Compress Menu
         JMenu mnCompress = new JMenu("Compress");
 
+        //mnFile - Menu Bar - Decompress Menu
+        JMenu mnDecompress = new JMenu("Decompress");
+
         //mntmSave - Menu Bar - File > Save - saves textArea to file
         JMenuItem mntmSave = new JMenuItem("Save");
         mntmSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                GUI.this.saveFile(textArea);
+                File myFile = (GUI.this.saveFile(textArea));
+                JOptionPane.showMessageDialog(GUI.this.getContentPane(),
+                        "File Size: " + myFile.length(), "File Saved",
+                        JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -205,6 +242,15 @@ public class GUI extends JFrame {
             }
         });
 
+        //mntmDecompressFile - Menu Bar - Compress > File - compresses text in File
+        JMenuItem mntmDecompressFile = new JMenuItem("File");
+        mntmDecompressFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                GUI.this.decompressFile(textArea);
+            }
+        });
+
         //Add all menu components
         mnFile.add(mntmSave);
         mnFile.add(mntmImport);
@@ -213,6 +259,9 @@ public class GUI extends JFrame {
         mnCompress.add(mntmCompressFile);
         mnCompress.add(mntmCompressTextArea);
         menuBar.add(mnCompress);
+
+        mnDecompress.add(mntmDecompressFile);
+        menuBar.add(mnDecompress);
 
         //Set this menu bar in the current frame
         this.setJMenuBar(menuBar);

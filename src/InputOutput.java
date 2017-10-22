@@ -42,7 +42,7 @@ public class InputOutput {
         return bytes;
     }
 
-    public static void compress(BinaryTree Key, File in, File out)
+    public static void compress(BinaryTree key, File in, File out)
             throws IOException {
         Map<Character, Integer> fileMap = getFileToMap(in);
 
@@ -52,7 +52,7 @@ public class InputOutput {
 
         while (inStream.available() > 0) {
             Character next = (char) inStream.read();
-            String currentPath = Key.getPath("" + next);
+            String currentPath = key.getPath("" + next);
             binaryStringRep += currentPath;
 
         }
@@ -73,7 +73,7 @@ public class InputOutput {
         inStream.close();
         outStream.close();
 
-        Key.getNode().c = Integer.toString(uselessBits);
+        key.getNode().c = Integer.toString(uselessBits);
 
     }
 
@@ -136,6 +136,75 @@ public class InputOutput {
         }
 
         return count;
+
+    }
+
+    public static void keyMapToFile(String uselessBits,
+            Map<Character, Integer> counts, File out) throws IOException {
+
+        FileOutputStream outStream = new FileOutputStream(out);
+
+        outStream.write(uselessBits.charAt(0));
+
+        for (Map.Entry<Character, Integer> entry : counts.entrySet()) {
+            String currentEntry = "" + entry.getKey() + entry.getValue();
+            for (int i = 0; i < currentEntry.length(); i++) {
+                outStream.write(currentEntry.charAt(i));
+            }
+        }
+
+        outStream.close();
+
+    }
+
+    public static String returnUselessBits(File in) throws IOException {
+        FileInputStream inStream = new FileInputStream(in);
+        char c = (char) inStream.read();
+        char a = c;
+        while (inStream.available() > 0) {
+            System.out.println(a);
+            a = (char) inStream.read();
+        }
+        inStream.close();
+        return "" + c;
+
+    }
+
+    public static Map<Character, Integer> fileToKeyMap(File in)
+            throws IOException {
+
+        Map<Character, Integer> counts = new HashMap<>();
+
+        FileInputStream inStream = new FileInputStream(in);
+
+        inStream.read();
+
+        String keyStringRep = "";
+
+        while (inStream.available() > 0) {
+            keyStringRep += (char) inStream.read();
+
+        }
+
+        inStream.close();
+
+        for (int i = 0; i < keyStringRep.length(); i++) {
+            Character key = keyStringRep.charAt(i);
+            Integer value = 0;
+            int countIndex = i + 1;
+            while (countIndex < keyStringRep.length()
+                    && keyStringRep.charAt(countIndex) >= '0'
+                    && keyStringRep.charAt(countIndex) <= '9') {
+                value *= 10;
+                value += Integer.parseInt("" + keyStringRep.charAt(countIndex));
+                countIndex++;
+                i++;
+            }
+            counts.put(key, value);
+
+        }
+
+        return counts;
 
     }
 
