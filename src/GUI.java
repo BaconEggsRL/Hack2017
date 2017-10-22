@@ -45,6 +45,85 @@ public class GUI extends JFrame {
         });
     }
 
+    private File saveFile(JTextArea textArea) {
+        JFileChooser fileChooser = new JFileChooser();
+        File fileName = null;
+        fileChooser.setApproveButtonText("Save");
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                fileName = new File(fileChooser.getSelectedFile() + ".txt");
+                FileWriter writer = new FileWriter(fileName);
+                BufferedWriter bw = new BufferedWriter(writer);
+                textArea.write(bw);
+                bw.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            textArea.requestFocus();
+        }
+        return fileName;
+    }
+
+    private void importFile(JTextArea textArea) {
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                File selectedFile = fileChooser.getSelectedFile();
+                FileReader reader = new FileReader(selectedFile);
+                BufferedReader br = new BufferedReader(reader);
+                textArea.read(br, null);
+                br.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            textArea.requestFocus();
+        }
+    }
+
+    private void compressFile(JTextArea textArea) {
+        BinaryTree tree;
+        File f;
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                f = fileChooser.getSelectedFile();
+                File comp = new File(f.getCanonicalPath() + "-comp.txt");
+                File decomp = new File(f.getCanonicalPath() + "-decomp.txt");
+                tree = new BinaryTree(InputOutput.getFileToMap(f));
+                InputOutput.compress(tree, f, comp);
+                InputOutput.decompress(tree, comp, decomp,
+                        Integer.parseInt(tree.getNode().c));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            textArea.requestFocus();
+        }
+    }
+
+    private void compressText(JTextArea textArea) {
+        BinaryTree tree;
+        File f;
+        f = this.saveFile(textArea);
+        try {
+            File comp = new File(f.getCanonicalPath() + "-comp.txt");
+            File decomp = new File(f.getCanonicalPath() + "-decomp.txt");
+            tree = new BinaryTree(InputOutput.getFileToMap(f));
+            InputOutput.compress(tree, f, comp);
+            InputOutput.decompress(tree, comp, decomp,
+                    Integer.parseInt(tree.getNode().c));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        textArea.requestFocus();
+    }
+
     /**
      * Create the frame.
      */
@@ -95,46 +174,16 @@ public class GUI extends JFrame {
         mntmSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setApproveButtonText("Save");
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        File fileName = new File(
-                                fileChooser.getSelectedFile() + ".txt");
-                        FileWriter writer = new FileWriter(fileName);
-                        BufferedWriter bw = new BufferedWriter(writer);
-                        textArea.write(bw);
-                        bw.close();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    textArea.requestFocus();
-                }
+                GUI.this.saveFile(textArea);
             }
         });
 
         //mntmImport - Menu Bar - File > Import... - imports text file into textArea
-        JMenuItem mntmImport = new JMenuItem("Import...");
+        JMenuItem mntmImport = new JMenuItem("Import");
         mntmImport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                JFileChooser fileChooser = new JFileChooser();
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        File selectedFile = fileChooser.getSelectedFile();
-                        FileReader reader = new FileReader(selectedFile);
-                        BufferedReader br = new BufferedReader(reader);
-                        textArea.read(br, null);
-                        br.close();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    textArea.requestFocus();
-                }
+                GUI.this.importFile(textArea);
             }
         });
 
@@ -143,24 +192,7 @@ public class GUI extends JFrame {
         mntmCompressFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                JFileChooser fileChooser = new JFileChooser();
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        File f = fileChooser.getSelectedFile();
-                        BinaryTree tree;
-                        File out = new File("comprand1.txt");
-                        File decomp = new File("decomprand1.txt");
-                        tree = new BinaryTree(InputOutput.getFileToMap(f));
-                        InputOutput.compress(tree, f, out);
-                        InputOutput.decompress(tree, out, decomp,
-                                Integer.parseInt(tree.getNode().c));
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    textArea.requestFocus();
-                }
+                GUI.this.compressFile(textArea);
             }
         });
 
@@ -169,31 +201,7 @@ public class GUI extends JFrame {
         mntmCompressTextArea.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setApproveButtonText("Save");
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        File f = fileChooser.getSelectedFile();
-                        FileWriter writer = new FileWriter(f);
-                        BufferedWriter bw = new BufferedWriter(writer);
-                        textArea.write(bw);
-                        bw.close();
-                        BinaryTree tree;
-                        File comp = new File(f.getCanonicalPath() + f.getName()
-                                + "-comp.txt");
-                        File decomp = new File(f.getCanonicalPath()
-                                + f.getName() + "-decomp.txt");
-                        tree = new BinaryTree(InputOutput.getFileToMap(f));
-                        InputOutput.compress(tree, f, comp);
-                        InputOutput.decompress(tree, comp, decomp,
-                                Integer.parseInt(tree.getNode().c));
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    textArea.requestFocus();
-                }
+                GUI.this.compressText(textArea);
             }
         });
 
